@@ -49,6 +49,66 @@ exports.addUser = async (req, res, next) => {
      });
 }
 
+exports.addAdmin = async (req, res, next) => {
+     const createAdmin = new Admin({
+          name: req.body.name,
+          email: req.body.email,
+          password: null,
+     });
+
+     const salt = await bcrypt.genSalt(10);
+     createAdmin.password = await bcrypt.hash(req.body.password, salt);
+     
+     createAdmin.save()
+     .then(result => {
+          res.status(200).json({
+               message: "New Admin Registered",
+               data: result,
+          });
+     })
+     .catch(err => {
+          next(err);
+     });
+}
+
+exports.addConsultant = async (req, res, next) => {
+     const uploadImagePromise = new Promise (async(resolve, reject) => {
+          try{
+               const uploadedResponse = await cloudinary.uploader.upload(req.body.photo, {
+                    upload_preset: 'bilikmental',
+               });
+               resolve(uploadedResponse.secure_url);
+          }catch(err){
+               resolve(500);
+          }
+     });
+
+     uploadImagePromise
+     .then(async (urlResult) => {
+          const createConsultant = new Consultant({
+               name: req.body.name,
+               description: req.body.description,
+               photo: urlResult === 500 ? null : urlResult,
+               email: req.body.email,
+               password: null,
+          });
+
+          const salt = await bcrypt.genSalt(10);
+          createConsultant.password = await bcrypt.hash(req.body.password, salt);
+          
+          createConsultant.save()
+          .then(result => {
+               res.status(200).json({
+                    message: "New Consultant Registered",
+                    data: result,
+               });
+          })
+          .catch(err => {
+               next(err);
+          });
+     });
+}
+
 exports.checkEmail = (req, res, next) => {
 
      User.findOne({email: req.body.email})
@@ -69,18 +129,31 @@ exports.login = async (req, res, next) => {
      const admin = await Admin.findOne({email: req.body.email});
      const consultant = await Consultant.findOne({email:req.body.email});
      const user = await User.findOne({email: req.body.email});
-
+     
      const data = admin ? admin : consultant ? consultant : user ? user : null;
      
      if(data){
           const isMatch = await bcrypt.compare(req.body.password, data.password);
      
           if(isMatch) {
-               res.status(200).json({message: "Login success", data: data});
+               res.status(200).json({message: "Login success", data: data , role: 
+          admin ? 1 : consultant ? 2 : user ? 3 : ''});
           }else{
                res.status(400).json({message: "Invalid email or password"});
           }
      }else {
           res.status(400).json({message: "Invalid email or password"});
+     }
+}
+
+exports.getUserData = async (req, res, next) => {
+
+     const userId = req.body.userId;
+     const userData = await User.findById(userId);
+
+     if(userData){
+          res.status(200).json({message: "Fetch user data success", data: userData});
+     }else{
+          res.status(400).json({message: "Failed to fetch data"});
      }
 }

@@ -10,7 +10,9 @@ app.use(express.json({limit: "50mb"}));
 app.use(express.urlencoded({ extended:true, limit: "50mb"}));
 
 const authRoutes = require('./src/routes/auth');
+const quoteRoutes = require('./src/routes/quote');
 app.use('/v1/auth', authRoutes);
+app.use('/v1/quote', quoteRoutes);
 
 app.use((error, req, res, next) => {
 
