@@ -2,18 +2,19 @@ const Quote = require('../../src/models/quote');
 
 exports.getAllQuotes = (req, res, next) => {
 
-     const category = req.body.category;
+     const category = req.body.params.category;
 
-     const perPage = req.body.perPage || 10;
-     const currentPage = req.body.currentPage || 1;
+     const perPage = req.body.params.perPage || 2;
+     const currentPage = req.body.params.currentPage || 1;
 
-     const querySearch = category ? 
+     const querySearch = category !== "All" ? 
      {category: category, isConfirmed: true} : {isConfirmed: true};
 
      Quote.find(querySearch).countDocuments()
      .then(count => {
           totalData = count;
           return Quote.find(querySearch)
+          .populate('user')
           .skip((parseInt(currentPage)-1)*parseInt(perPage))
           .limit(parseInt(perPage));
      })
@@ -24,6 +25,7 @@ exports.getAllQuotes = (req, res, next) => {
                total_data: totalData,
                per_page: perPage,
                current_page: currentPage,
+               total_page: Math.ceil(totalData/ perPage),
           });
      })
      .catch(err => {
@@ -41,6 +43,7 @@ exports.getAllUserQuotes = (req, res, next) => {
      .then(count => {
           totalData = count;
           return Quote.find(querySearch)
+          .populate('user')
           .skip((parseInt(currentPage)-1)*parseInt(perPage))
           .limit(parseInt(perPage));
      })
