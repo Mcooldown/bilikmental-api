@@ -5,6 +5,7 @@ const quoteController = require('../controllers/quote');
 
 router.post('/', quoteController.getAllQuotes);
 router.post('/user', quoteController.getAllQuotes);
+router.post('/get-by-id',quoteController.getQuoteById);
 router.post('/add', quoteController.addQuote);
 router.post('/confirm', quoteController.confirmQuote);
 router.post('/delete',quoteController.deleteQuote);

@@ -4,7 +4,7 @@ exports.getAllQuotes = (req, res, next) => {
 
      const category = req.body.params.category;
 
-     const perPage = req.body.params.perPage || 2;
+     const perPage = req.body.params.perPage || 10;
      const currentPage = req.body.params.currentPage || 1;
 
      const querySearch = category !== "All" ? 
@@ -59,6 +59,21 @@ exports.getAllUserQuotes = (req, res, next) => {
      .catch(err => {
           next(err);
      });
+}
+
+exports.getQuoteById = (req, res, next) => {
+
+     const quoteId = req.body.quoteId;
+
+     Quote.findOne({isConfirmed: true, _id: quoteId})
+     .populate('user')
+     .then(quote => {
+          if(!quote) res.status(400).json({message: "Quote not found"});
+          else res.status(200).json({message: "Quote fetched", data: quote});
+     })
+     .catch(err => {
+          next(err);
+     })
 }
 
 exports.addQuote = (req, res, next) => {
