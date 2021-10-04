@@ -7,6 +7,7 @@ const Comment = new Schema({
      contentId: {type: Schema.Types.ObjectId, required: true},
      text: {type: String, required: true },
      user: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
+     isEdited : {type: Boolean, required:true},
 },{
      timestamps: true,
 });

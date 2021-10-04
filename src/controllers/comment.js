@@ -18,7 +18,8 @@ exports.addComment = (req, res, next) => {
           type : req.body.type,
           contentId: req.body.contentId,
           text: req.body.text,
-          user: req.body.userId
+          user: req.body.userId,
+          isEdited: false,
      });
 
      createComment.save()
@@ -27,6 +28,25 @@ exports.addComment = (req, res, next) => {
                message: "New Comment Created",
                data: result,
           });
+     })
+     .catch(err => {
+          next(err);
+     })
+}
+
+exports.updateComment = (req, res, next) => {
+
+     Comment.findById(req.body.commentId)
+     .then(comment => {
+          if(!comment) res.status(400).json({message: "Comment not found"});
+
+          comment.text = req.body.text;
+          comment.isEdited = true;
+
+          return comment.save();
+     })
+     .then(result => {
+          res.status(200).json({message: "Comment updated", data: result});
      })
      .catch(err => {
           next(err);

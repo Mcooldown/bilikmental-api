@@ -36,10 +36,11 @@ exports.getAllQuotes = (req, res, next) => {
 exports.getAllUserQuotes = (req, res, next) => {
 
      const userId = req.body.userId;
-     const perPage = req.body.perPage || 10;
-     const currentPage = req.body.currentPage || 1;
+     const perPage = req.body.params.perPage || 10;
+     const currentPage = req.body.params.currentPage || 1;
+     const querySearch = {user: userId};
 
-     Quote.find({user: userId}).countDocuments()
+     Quote.find(querySearch).countDocuments()
      .then(count => {
           totalData = count;
           return Quote.find(querySearch)
@@ -49,7 +50,7 @@ exports.getAllUserQuotes = (req, res, next) => {
      })
      .then(result => {
           res.status(200).json({
-               message : "All Quote Fetched",
+               message : "User Quotes Fetched",
                data: result,
                total_data: totalData,
                per_page: perPage,
