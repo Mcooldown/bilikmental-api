@@ -71,44 +71,6 @@ exports.addAdmin = async (req, res, next) => {
      });
 }
 
-exports.addConsultant = async (req, res, next) => {
-     const uploadImagePromise = new Promise (async(resolve, reject) => {
-          try{
-               const uploadedResponse = await cloudinary.uploader.upload(req.body.photo, {
-                    upload_preset: 'bilikmental',
-               });
-               resolve(uploadedResponse.secure_url);
-          }catch(err){
-               resolve(500);
-          }
-     });
-
-     uploadImagePromise
-     .then(async (urlResult) => {
-          const createConsultant = new Consultant({
-               name: req.body.name,
-               description: req.body.description,
-               photo: urlResult === 500 ? null : urlResult,
-               email: req.body.email,
-               password: null,
-          });
-
-          const salt = await bcrypt.genSalt(10);
-          createConsultant.password = await bcrypt.hash(req.body.password, salt);
-          
-          createConsultant.save()
-          .then(result => {
-               res.status(200).json({
-                    message: "New Consultant Registered",
-                    data: result,
-               });
-          })
-          .catch(err => {
-               next(err);
-          });
-     });
-}
-
 exports.checkEmail = (req, res, next) => {
 
      User.findOne({email: req.body.email})
