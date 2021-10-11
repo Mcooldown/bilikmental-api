@@ -74,7 +74,6 @@ exports.getAllConsultant = (req, res, next) => {
 exports.getConsultantById = (req, res, next) => {
      
      Consultant.findOne({isConfirmed: true, _id: req.body.consultantId})
-     .populate('user')
      .then(consultant => {
           if(!consultant) res.status(400).json({message: "Consultant not found"});
           else res.status(200).json({message: "Consultant fetched", data: consultant});

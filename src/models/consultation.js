@@ -7,6 +7,7 @@ const Consultation = new Schema({
      consultant: {type: Schema.Types.ObjectId, required: true, ref: 'Consultant'},
      date: {type: Date, required: true },
      shift: { type: String, required: true},
+     status: {type: Number, required: true},
 },{
      timestamps: true,
 });

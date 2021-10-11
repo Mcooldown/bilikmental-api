@@ -67,6 +67,7 @@ exports.addConsultation = (req, res, next) => {
           consultant: req.body.consultantId,
           date: req.body.date,
           shift: req.body.shift,
+          status: 0,
      });
 
      createConsultation.save()
@@ -77,6 +78,22 @@ exports.addConsultation = (req, res, next) => {
           });
      })
      .catch(err => {
+          next(err);
+     })
+}
+
+exports.doneStatus = (req, res, next) => {
+     Consultation.findById(req.body.consultationId)
+     .then(consultation => {
+          if(!consultation) res.status(200).json({message: "Consultation not found"});
+
+          consultation.status = 1;
+          return consultation.save();
+     })
+     .then((result) => {
+          res.status(200).json({message: "Consultation done", data: result});
+     })
+     .catch(err =>{
           next(err);
      })
 }
