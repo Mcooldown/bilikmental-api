@@ -59,7 +59,7 @@ exports.getAllUserMeditation = (req, res, next) => {
 
 exports.getUserMeditationById = (req, res, next) => {
 
-     UserMeditation.findOne({meditation: req.body.userMeditationId})
+     UserMeditation.findById(req.body.userMeditationId)
      .populate('meditation')
      .then(userMeditation => {
           if(!userMeditation) res.status(400).json({message: "User Meditation not found"});
@@ -76,10 +76,6 @@ exports.getAllMeditationStep = (req, res, next) => {
           res.status(200).json({
                message : "All Meditation Step Fetched",
                data: result,
-               total_data: totalData,
-               per_page: perPage,
-               current_page: currentPage,
-               total_page: Math.ceil(totalData/ perPage),
           });
      })
      .catch(err => {
