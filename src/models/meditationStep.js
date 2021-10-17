@@ -9,8 +9,6 @@ const MeditationStep = new Schema({
      description: { type: String, required: true},
      resourceFile: { type: String, required: true},
      video: { type: String, required: true},
-},{
-     timestamps: true,
 });
 
 module.exports = mongoose.model('MeditationStep', MeditationStep);

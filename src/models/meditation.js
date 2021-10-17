@@ -9,8 +9,7 @@ const Meditation = new Schema({
      withVideo: {type: Boolean, required: true},
      duration: {type: Number, required:true},
      durationType: {type: String, enum:["mins","hrs","days"]},
-},{
-     timestamps: true,
+
 });
 
 module.exports = mongoose.model('Meditation', Meditation);

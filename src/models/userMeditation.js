@@ -6,6 +6,7 @@ const UserMeditation = new Schema({
      user: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
      meditation: {type: Schema.Types.ObjectId, required: true, ref: 'Meditation'},
      currentStep: {type: Number, required: true},
+     totalStep: {type: Number, required:true},
 },{
      timestamps: true,
 });
