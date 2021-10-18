@@ -9,14 +9,14 @@ app.use(cors());
 app.use(express.json({limit: "50mb"}));
 app.use(express.urlencoded({ extended:true, limit: "50mb"}));
 
-const meditationRoutes = require('./src/routes/meditation');
+// const meditationRoutes = require('./src/routes/meditation');
 const authRoutes = require('./src/routes/auth');
 const quoteRoutes = require('./src/routes/quote');
 const commentRoutes = require('./src/routes/comment');
 const articleRoutes = require('./src/routes/article');
 const consultantRoutes = require('./src/routes/consultant');
 const consultationRoutes = require('./src/routes/consultation');
-app.use('/v1/meditations', meditationRoutes);
+// app.use('/v1/meditations', meditationRoutes);
 app.use('/v1/auth', authRoutes);
 app.use('/v1/quotes', quoteRoutes);
 app.use('/v1/comments', commentRoutes);
